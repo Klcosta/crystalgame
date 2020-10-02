@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Gem Hunter</title>
+    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.typekit.net/otr6fiu.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="icon" href="assets/images/favicon.png">
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="rounded border border-white mt-5 w-75 mx-auto p-4 rust brown">GEM HUNTER</h1>
+            </div>
+        </div>
+        <div class="row rounded border border-white mt-4 text-center p-4 rounded brown">
+            <div id="instructions" class="rust"></div>
+            <div id="losses" class="rust"></div>
+        </div>
+        <div class="row mt-5">
+            <div class='col-1'>
+                <div id='minus' class="numbers rounded border border-white rust brown pointer m-2 p-2 text-center">-
+                </div>
+            </div>
+            <div id="crystals" class="col-10"></div>
+            <div class='col-1'>
+                <div id='plus' class="numbers rounded border border-white rust brown pointer m-2 p-2 text-center">+
+                </div>
+            </div>
+        </div>
+
+        <div id="numberbox" class="row pb-2 mt-5 text-center rounded border border-white brown">
+            <div class="col-6 rust">
+                <p>SCORE</p><span class="border border-white rounded box" id="yourscorebox"></span>
+                <div class="numbers bouncing-numbers" id="yourscore"></div>
+            </div>
+            <div class="col-6 rust">
+                <p>TARGET</p><span class="border border-white rounded box" id="number-to-guess-box"></span>
+                <div class="numbers bouncing-numbers" id="number-to-guess"></div>
+            </div>
+        </div>
+
+        <div>
+            <div class="row mb-4 pointer">
+                <div id="instructions2" class="rust">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="modal" class="container numbers rounded border border-white mt-5 mx-auto p-4 rust brown">
+        <div class="row">
+            <div class="col-12">
+                <p id="close" class="text-right pointer">x</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 id="win-or-loose"></h2>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        //Establish necessary global variables
+        //Number to guess
+        var targetNumber = 0;
+        //Value of the Gem
+        var gemvalue = 0;
+        //counter
+        var counter = 0;
+        //wins
+        var wins = 0;
+        //losses
+        var losses = 0;
+        // instructions
+        var instructions = "You will be given a random target number at the start of each game. There are four gems. by clicking on a gem you will add to your score. You win the game by matching your score to the target number. The value of each gem is hidden from you until you click on it. Each time the game starts the game will change the values of each gem. After your first round you'll be able to add and subtract gems to change the difficulty"
+        // gem names
+        var gems = ["gem0", "gem1", "gem2", "gem3", "gem4", "gem5"]
+        // number of gems
+        var gemcounter = 4
+
+        //Assign and push number to guess
+        //Function to generate target number 
+        function generatetargetnumber() {
+            targetNumber = Math.floor(19 + Math.random() * (120 + 1 - 19))
+            console.log(targetNumber)
+            var digitslength = targetNumber.toString().length
+            console.log("digitislength:" + digitslength)
+            if (digitslength === 2) {
+                $("#number-to-guess-box").css("padding", "1px 20px 18px 20px")
+            }
+            else if (digitslength === 3) {
+                $("#number-to-guess-box").css("padding", "1px 30px 18px 30px")
+            }
+        }
+
+        //generate target number
+        generatetargetnumber()
+        //push target number
+        $("#number-to-guess").text(targetNumber);
+        //Push your score (now equal to 0) to the screen
+        $("#yourscore").text(counter);
+        //Push instructions
+        $("#instructions").text(instructions);
+
+        // function to generate a number for each gem. 
+        function generategemvalue() {
+            gemvalue = Math.floor(1 + Math.random() * (12 + 1 - 1))
+            console.log(gemvalue)
+        }
+
+        function shuffle(array) {
+            var currentIndex = array.length, temporaryValue, randomIndex;
+            // While there remain elements to shuffle...
+            while (0 !== currentIndex) {
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+                // And swap it with the current element.
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+            return array;
+        }
+
+        //Function to Generate 4 gems and add them value
+        function generategems() {
+            var randomgems = shuffle(gems)
+            var crystalcontainer = $("<div class='text-center d-flex justify-content-center flex-wrap'>")
+            // For loop to create, assign number and push each gem
+            for (var i = 0; i < gemcounter; i++) {
+                // Create an immage tag
+                var imageCrystal = $("<img>");
+                // Assign class = ".gembutton".
+                imageCrystal.addClass("gembutton pointer");
+                // Create a source link for each gem
+                imageCrystal.attr("src", "assets/images/" + randomgems[i] + ".png");
+                // function to generate a number for each gem. 
+                function generategemvalue() {
+                    gemvalue = Math.floor(1 + Math.random() * (12 + 1 - 1))
+                    console.log(gemvalue)
+                }
+                // Call function to generate a number for each gem
+                generategemvalue()
+                // assign an attribute to each gem with the number for each gem. 
+                imageCrystal.attr("data-crystalvalue", gemvalue);
+                // Push gems to html
+                crystalcontainer.append(imageCrystal);
+            }
+            $("#crystals").html(crystalcontainer);
+            clickit()
+            return false
+
+        }
+
+
+        plus()
+        minus()
+
+        //Generate four gems
+        generategems();
+
+        //Reset function for wins and losses
+        function resetgame() {
+            //reset the size of the box
+            $("#yourscorebox").css("padding", "1px 12px 18px 12px")
+            //push new wins score to html
+            $("#instructions").text("wins " + wins);
+            // Assign class = ".wandl" and "col-6".
+            $("#instructions").addClass("wandl");
+            $("#instructions").addClass("col-6");
+            //push loss score to html
+            $("#losses").text("losses " + losses);
+            // Assign class = ".wandl" and "col-6"
+            $("#losses").addClass("wandl");
+            $("#losses").addClass("col-6");
+            //add text to instruction2 div
+            $("#instructions2").text("Click here to see the instructions");
+            //remove col-12 class
+            $('#instructions2').removeClass('col-12');
+            //add bootstrap classes to instructions 2
+            $("#instructions2").addClass("col-md-3 col-sm-4 brown text-center rounded border border-white mt-4 p-2")
+            //reset counter 
+            counter = 0;
+            //push new counter
+            $("#yourscore").text(counter);
+            //reset target number
+            generatetargetnumber()
+            //push target number
+            var rotationarray = ["rotation", "negativeRotation"]
+            shuffle(rotationarray)
+            setTimeout(function () {
+                $("#number-to-guess").text(targetNumber);
+                $("#number-to-guess").animate({ fontSize: "60px" }, 300);
+                $("#number-to-guess").addClass(rotationarray[0])
+                setTimeout(function () {
+                    $("#number-to-guess").animate({ fontSize: "25px" }, 300)
+                    $("#number-to-guess").removeClass(rotationarray[0])
+                }, 300);
+                var digitslength = targetNumber.toString().length
+                console.log("digitislength:" + digitslength)
+                if (digitslength === 2) {
+                    $("#number-to-guess-box").css("padding", "1px 20px 18px 20px")
+                }
+                else if (digitslength === 3) {
+                    $("#number-to-guess-box").css("padding", "1px 30px 18px 30px")
+                }
+            }, 1500);
+            $("#crystals").empty();
+            //generate new value for gems
+            generategems()
+        }
+
+        //Function for when a gem is clicked the score goes up
+        function clickit() {
+            $(".gembutton").on("click", function () {
+                //stop animation on next click
+                $("#yourscore").stop(true, true)
+                //Extract the gem value attibute to gemscore variable
+                var gemscore = ($(this).attr("data-crystalvalue"));
+                gemscore = parseInt(gemscore);
+                //add the gemscore to the counter
+                counter += gemscore;
+                console.log("New score: " + counter);
+                console.log("counter length:" + counter.toString().length)
+                //push new score to html
+                $("#yourscore").text(counter)
+
+                //if you win:
+                if (counter === targetNumber) {
+                    console.log("You win!");
+                    //add 1 to the wins variable
+                    wins++;
+                    var winningtexts = ["Good Job", "Well Done", "Amazingly Done", "You did it", "Congratulations"]
+                    shuffle(winningtexts)
+                    $("#win-or-loose").text("You Won! " + winningtexts[0])
+                    $("#modal").css("display", "block")
+                    setTimeout(function () {
+                        $("#modal").css("display", "none")
+                    }, 1500);
+                    resetgame()
+                }
+                else if (counter >= targetNumber) {
+
+                    console.log("You lose!!");
+                    //add 1 to the wins variable
+                    losses++;
+                    var loosingtexts = ["Sorry", "Try Again", "Better Luck Next Time", "Bad Luck",]
+                    shuffle(loosingtexts)
+                    $("#win-or-loose").text("You Lost! " + loosingtexts[0])
+                    $("#modal").css("display", "block")
+                    setTimeout(function () {
+                        $("#modal").css("display", "none")
+                    }, 2000);
+                    resetgame()
+                }
+
+                else {
+                    //Animate score number
+                    var rotationarray = ["rotation", "negativeRotation"]
+                    shuffle(rotationarray)
+                    $("#yourscore").animate({ fontSize: "60px" }, 300);
+                    $("#yourscore").addClass(rotationarray[0])
+                    setTimeout(function () {
+                        $("#yourscore").animate({ fontSize: "25px" }, 300)
+                        $("#yourscore").removeClass(rotationarray[0])
+                    }, 300);
+                    //Increase the size of the box if needed
+                    var counterlength = counter.toString().length
+                    if (counterlength === 2) {
+                        $("#yourscorebox").css("padding", "1px 20px 18px 20px")
+                    }
+                    else if (counterlength === 3) {
+                        $("#yourscorebox").css("padding", "1px 30px 18px 30px")
+                    }
+                }
+
+            })
+        }
+
+        // clickit()
+
+        $("#close").on("click", function () {
+            $("#modal").css("display", "none")
+
+        })
+
+        function minus() {
+            $("#minus").on("click", function () {
+                if (gemcounter === 3) {
+                    console.log("Im here")
+                    $("#win-or-loose").text("3 is the minimum number of gems")
+                    $("#modal").css("display", "block")
+                    setTimeout(function () {
+                        $("#modal").css("display", "none")
+                    }, 1500);
+                    generategems()
+                    clickit()
+
+                }
+                else {
+                    gemcounter--
+                    console.log("gemcounter:" + gemcounter)
+                    generategems()
+                    clickit()
+                }
+
+            })
+        }
+
+        // minus()
+
+        function plus() {
+            $("#plus").on("click", function () {
+                if (gemcounter === 6) {
+                    $("#win-or-loose").text("sorry we ran out of gems")
+                    $("#modal").css("display", "block")
+                    setTimeout(function () {
+                        $("#modal").css("display", "none")
+                    }, 1500);
+                    generategems()
+
+                }
+                else {
+                    gemcounter++
+                    console.log("gemcounter: x " + gemcounter)
+                    generategems()
+
+                }
+
+            })
+
+        }
+
+        // plus()
+
+        //When clicking the instructions2 div in order to show instructions once they have dissapeared
+        $("#instructions2").on("click", function () {
+            $("#instructions2").text(instructions);
+            $('#instructions2').removeClass('col-md-3 col-sm-4');
+            $("#instructions2").addClass("col-12")
+        });
+
+    </script>
+</body>
+
+</html>
